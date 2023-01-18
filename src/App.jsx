@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.name) {
+    errors.name = 'Required';
+  } else if (values.name.length < 5) {
+    errors.name = 'Min Length 5 characters';
+  }
+  if (!values.lastName) {
+    errors.lastName = 'Required';
+  } else if (values.lastName.length < 5) {
+    errors.lastName = 'Min Length 5 characters';
+  }
+  if (!values.email) {
+    errors.email = 'Required';
+  } else if (values.email.length < 8) {
+    errors.email = 'Min Length 8 characters';
+  }
+  return errors;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <Formik
+      initialValues={{ name: '', lastName: '', email: '' }}
+      validate={validate}
+      onSubmit={(values) => console.log(values)}
+    >
+      <Form>
+        <label>Name</label>
+        <Field type="text" name="name" />
+        <ErrorMessage name="name" />
+        <br />
+        <label>Last Name</label>
+        <Field type="text" name="lastName" />
+        <br />
+        <ErrorMessage name="lastName" />
+        <label>Email</label>
+        <Field type="email" name="email" />
+        <ErrorMessage name="email" />
+        <button type="submit">Send</button>
+      </Form>
+    </Formik>
+  );
 }
 
-export default App
+export default App;
